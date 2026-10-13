@@ -4,27 +4,43 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Lab Horoscope</title>
-<meta name="description" content="What the stars say about your lab group this week.">
+<meta name="description" content="Tap your sign to reveal what the stars say about your lab group this week.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#EDF1EF;--ink:#16212B;--muted:#556570;--line:#C4CFCB;
+:root{--bg:#EDF1EF;--ink:#16212B;--muted:#556570;--plate:#FAFCFB;--line:#C4CFCB;
 --display:"Bricolage Grotesque","Trebuchet MS",sans-serif;--serif:"Source Serif 4",Georgia,serif}
-@media (prefers-color-scheme:dark){:root{--bg:#0F1A21;--ink:#E6EEF0;--muted:#93A5AE;--line:#2B3E4A}}
+@media (prefers-color-scheme:dark){:root{--bg:#0F1A21;--ink:#E6EEF0;--muted:#93A5AE;--plate:#172630;--line:#2B3E4A}}
 *,*::before,*::after{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);line-height:1.55}
-.wrap{max-width:980px;margin:0 auto;padding:40px 20px 64px}
+.wrap{max-width:900px;margin:0 auto;padding:40px 20px 64px}
 h1{font-family:var(--display);font-weight:800;font-size:clamp(3rem,11vw,6.5rem);line-height:.92;letter-spacing:-.035em;margin:0}
 .sub{font-size:1.15rem;color:var(--muted);margin:14px 0 0}
 .week{display:inline-block;margin-top:20px;font-family:var(--display);font-weight:500;border:1.5px solid var(--ink);border-radius:99px;padding:4px 14px}
-.grid{display:grid;grid-template-columns:1fr;gap:0 48px;margin-top:36px}
-@media(min-width:760px){.grid{grid-template-columns:1fr 1fr}}
-.sign{display:flex;gap:16px;padding:20px 0;border-top:1.5px solid var(--line)}
-.glyph{flex:none;width:56px;height:56px;border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.5),transparent 40%),var(--c);display:grid;place-items:center;color:#fff;font-size:1.7rem;font-family:"Segoe UI Symbol","Apple Symbols",sans-serif;text-shadow:0 1px 2px rgba(0,0,0,.35)}
-.sign h2{font-family:var(--display);font-weight:800;font-size:1.25rem;margin:0;line-height:1.2}
-.sign h2 small{font-weight:500;font-size:.85rem;color:var(--muted);margin-left:8px}
-.sign p{margin:4px 0 0;font-size:1.1rem}
+h2.step{font-family:var(--display);font-weight:500;font-size:1.05rem;color:var(--muted);margin:40px 0 12px}
+.plate{background:var(--plate);border:1.5px solid var(--line);border-radius:28px 28px 28px 8px;padding:22px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px 10px}
+@media(min-width:600px){.plate{grid-template-columns:repeat(6,1fr)}}
+.sign{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;font-family:var(--display);font-weight:500;font-size:.85rem;color:var(--muted);border-radius:12px;padding:4px 2px}
+.sign small{font-size:.72rem;opacity:.85}
+.dot{width:min(64px,100%);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.55),transparent 38%),var(--c);border:3px solid var(--line);display:grid;place-items:center;color:#fff;font-size:1.8rem;font-family:"Segoe UI Symbol","Apple Symbols",sans-serif;text-shadow:0 1px 2px rgba(0,0,0,.35);transition:transform .15s}
+.sign:hover .dot{transform:scale(1.07)}
+.sign:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.sign[aria-pressed="true"]{color:var(--ink)}
+.sign[aria-pressed="true"] .dot{border-color:var(--ink);box-shadow:0 0 0 4px var(--plate),0 0 0 6px var(--ink)}
+.reading{margin-top:28px;border-left:6px solid var(--c);padding:6px 0 6px 22px}
+.reading[hidden]{display:none}
+.reading.show{animation:rise .35s ease-out}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.reading.show{animation:none}.dot{transition:none}}
+.reading h3{font-family:var(--display);font-weight:800;font-size:clamp(2rem,6vw,3rem);line-height:1;letter-spacing:-.02em;margin:0}
+.reading h3 small{display:block;font-weight:500;font-size:.95rem;letter-spacing:0;color:var(--muted);margin-top:6px}
+.reading .text{font-size:1.4rem;line-height:1.4;margin:18px 0 24px;max-width:30em}
+.meters{display:grid;grid-template-columns:1fr;gap:10px;max-width:420px}
+.meter{display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:var(--display);font-weight:500}
+.pips{display:flex;gap:5px}
+.pips i{width:16px;height:16px;border-radius:50%;border:2px solid var(--line)}
+.pips i.on{background:var(--c);border-color:var(--c)}
 .note{margin-top:48px;color:var(--muted);font-size:.9rem}
 </style>
 </head>
@@ -33,7 +49,16 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(3rem,11vw,6.5rem);
   <h1>Lab Horoscope</h1>
   <p class="sub">What the stars say about your lab group this week.</p>
   <span class="week" id="week"></span>
-  <div class="grid" id="grid"></div>
+
+  <h2 class="step">Tap your sign</h2>
+  <div class="plate" id="plate" role="group" aria-label="Zodiac signs"></div>
+
+  <section class="reading" id="reading" hidden aria-live="polite">
+    <h3 id="rname"></h3>
+    <p class="text" id="rtext"></p>
+    <div class="meters" id="rmeters"></div>
+  </section>
+
   <p class="note">For entertainment only. Any resemblance to your actual lab is a coincidence of the cosmos.</p>
 </div>
 
@@ -41,25 +66,28 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(3rem,11vw,6.5rem);
 /* =====================================================================
    EDIT HERE EVERY WEEK
    1) Change the week label.
-   2) Change the text between the quotation marks for each sign.
+   2) For each sign, change the text between the quotation marks and the
+      four levels (whole numbers from 1 to 5):
+        luck = luck in the lab      stress = stress level
+        caffeine = coffee intake    sleep = hours of sleep
    Keep the quotation marks and the comma at the end of each line.
    If a phrase contains a quotation mark ("), write it as \"
    ===================================================================== */
 const WEEK = "Week of October 12, 2026";
 
-const PHRASES = {
-  Aries:       "You will volunteer to run the experiment nobody wants, then regret it by Wednesday.",
-  Taurus:      "The lab fridge will be rearranged, and you will take it personally.",
-  Gemini:      "You will be in two meetings at once and take notes in neither.",
-  Cancer:      "You will bring snacks to the lab and become the group's favorite person.",
-  Leo:         "Your poster will draw a crowd, and the crowd will mostly want the free pens.",
-  Virgo:       "You will relabel every tube in the freezer and nobody will thank you.",
-  Libra:       "You will mediate a fight over the thermocycler schedule with great diplomacy.",
-  Scorpio:     "You will quietly know who finished the last of the reagent, and say nothing.",
-  Sagittarius: "You will propose an experiment so ambitious that the PI needs to sit down.",
-  Capricorn:   "You will finish your experiments early and start the next ones out of principle.",
-  Aquarius:    "You will suggest a method nobody has heard of, and it will work on the second try.",
-  Pisces:      "You will daydream through a seminar and come up with the best idea of the year."
+const HOROSCOPE = {
+  Aries:       { text: "You will volunteer to run the experiment nobody wants, then regret it by Wednesday.", luck: 3, stress: 4, caffeine: 5, sleep: 2 },
+  Taurus:      { text: "The lab fridge will be rearranged, and you will take it personally.",                  luck: 2, stress: 3, caffeine: 3, sleep: 4 },
+  Gemini:      { text: "You will be in two meetings at once and take notes in neither.",                       luck: 3, stress: 4, caffeine: 4, sleep: 2 },
+  Cancer:      { text: "You will bring snacks to the lab and become the group's favorite person.",             luck: 4, stress: 2, caffeine: 2, sleep: 4 },
+  Leo:         { text: "Your poster will draw a crowd, and the crowd will mostly want the free pens.",         luck: 4, stress: 2, caffeine: 3, sleep: 3 },
+  Virgo:       { text: "You will relabel every tube in the freezer and nobody will thank you.",                luck: 3, stress: 3, caffeine: 4, sleep: 3 },
+  Libra:       { text: "You will mediate a fight over the thermocycler schedule with great diplomacy.",        luck: 4, stress: 3, caffeine: 3, sleep: 4 },
+  Scorpio:     { text: "You will quietly know who finished the last of the reagent, and say nothing.",         luck: 3, stress: 3, caffeine: 4, sleep: 3 },
+  Sagittarius: { text: "You will propose an experiment so ambitious that the PI needs to sit down.",           luck: 5, stress: 3, caffeine: 3, sleep: 2 },
+  Capricorn:   { text: "You will finish your experiments early and start the next ones out of principle.",     luck: 3, stress: 5, caffeine: 5, sleep: 1 },
+  Aquarius:    { text: "You will suggest a method nobody has heard of, and it will work on the second try.",   luck: 5, stress: 2, caffeine: 3, sleep: 3 },
+  Pisces:      { text: "You will daydream through a seminar and come up with the best idea of the year.",      luck: 4, stress: 1, caffeine: 2, sleep: 5 }
 };
 /* ===================== END OF THE PART YOU EDIT ===================== */
 
@@ -77,22 +105,45 @@ const SIGNS = [
   ["Aquarius","Jan 20 – Feb 18","\u2652","#D9A21B"],
   ["Pisces","Feb 19 – Mar 20","\u2653","#2F7DE1"]
 ];
+const METERS = [["luck","Luck in the lab"],["stress","Stress"],["caffeine","Caffeine"],["sleep","Sleep"]];
 
-document.getElementById("week").textContent = WEEK;
-const grid = document.getElementById("grid");
-SIGNS.forEach(([name, dates, glyph, color]) => {
-  const s = document.createElement("section");
-  s.className = "sign";
-  s.style.setProperty("--c", color);
-  const g = document.createElement("div");
-  g.className = "glyph"; g.setAttribute("aria-hidden", "true"); g.textContent = glyph + "\uFE0E";
-  const b = document.createElement("div");
-  const h = document.createElement("h2");
-  h.textContent = name;
-  const sm = document.createElement("small"); sm.textContent = dates; h.appendChild(sm);
-  const p = document.createElement("p"); p.textContent = PHRASES[name] || "";
-  b.append(h, p); s.append(g, b); grid.appendChild(s);
+const $ = id => document.getElementById(id);
+$("week").textContent = WEEK;
+const plate = $("plate"), reading = $("reading");
+
+SIGNS.forEach(([name, dates, glyph, color], i) => {
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "sign"; b.setAttribute("aria-pressed", "false");
+  b.style.setProperty("--c", color);
+  const d = document.createElement("span"); d.className = "dot"; d.textContent = glyph + "\uFE0E"; d.setAttribute("aria-hidden", "true");
+  const n = document.createElement("span"); n.textContent = name;
+  const s = document.createElement("small"); s.textContent = dates;
+  b.append(d, n, s);
+  b.addEventListener("click", () => reveal(i, b));
+  plate.appendChild(b);
 });
+
+function reveal(i, btn) {
+  const [name, dates, , color] = SIGNS[i], data = HOROSCOPE[name] || {};
+  [...plate.children].forEach(x => x.setAttribute("aria-pressed", x === btn));
+  reading.style.setProperty("--c", color);
+  const h = $("rname"); h.textContent = name;
+  const sm = document.createElement("small"); sm.textContent = dates; h.appendChild(sm);
+  $("rtext").textContent = data.text || "";
+  const box = $("rmeters"); box.textContent = "";
+  METERS.forEach(([key, label]) => {
+    const v = Math.max(0, Math.min(5, Math.round(Number(data[key]) || 0)));
+    const row = document.createElement("div"); row.className = "meter";
+    const l = document.createElement("span"); l.textContent = label;
+    const p = document.createElement("span"); p.className = "pips"; p.setAttribute("role", "img"); p.setAttribute("aria-label", v + " out of 5");
+    for (let k = 1; k <= 5; k++) { const e = document.createElement("i"); if (k <= v) e.className = "on"; p.appendChild(e); }
+    row.append(l, p); box.appendChild(row);
+  });
+  reading.hidden = false;
+  reading.classList.remove("show"); void reading.offsetWidth; reading.classList.add("show");
+  reading.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion:reduce)").matches ? "auto" : "smooth", block: "nearest" });
+}
 </script>
 </body>
 </html>
+
