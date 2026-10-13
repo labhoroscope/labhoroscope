@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lab Horoscope</title>
+<meta name="description" content="What the stars say about your lab group this week.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EDF1EF;--ink:#16212B;--muted:#556570;--line:#C4CFCB;
+--display:"Bricolage Grotesque","Trebuchet MS",sans-serif;--serif:"Source Serif 4",Georgia,serif}
+@media (prefers-color-scheme:dark){:root{--bg:#0F1A21;--ink:#E6EEF0;--muted:#93A5AE;--line:#2B3E4A}}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);line-height:1.55}
+.wrap{max-width:980px;margin:0 auto;padding:40px 20px 64px}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(3rem,11vw,6.5rem);line-height:.92;letter-spacing:-.035em;margin:0}
+.sub{font-size:1.15rem;color:var(--muted);margin:14px 0 0}
+.week{display:inline-block;margin-top:20px;font-family:var(--display);font-weight:500;border:1.5px solid var(--ink);border-radius:99px;padding:4px 14px}
+.grid{display:grid;grid-template-columns:1fr;gap:0 48px;margin-top:36px}
+@media(min-width:760px){.grid{grid-template-columns:1fr 1fr}}
+.sign{display:flex;gap:16px;padding:20px 0;border-top:1.5px solid var(--line)}
+.glyph{flex:none;width:56px;height:56px;border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.5),transparent 40%),var(--c);display:grid;place-items:center;color:#fff;font-size:1.7rem;font-family:"Segoe UI Symbol","Apple Symbols",sans-serif;text-shadow:0 1px 2px rgba(0,0,0,.35)}
+.sign h2{font-family:var(--display);font-weight:800;font-size:1.25rem;margin:0;line-height:1.2}
+.sign h2 small{font-weight:500;font-size:.85rem;color:var(--muted);margin-left:8px}
+.sign p{margin:4px 0 0;font-size:1.1rem}
+.note{margin-top:48px;color:var(--muted);font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Lab Horoscope</h1>
+  <p class="sub">What the stars say about your lab group this week.</p>
+  <span class="week" id="week"></span>
+  <div class="grid" id="grid"></div>
+  <p class="note">For entertainment only. Any resemblance to your actual lab is a coincidence of the cosmos.</p>
+</div>
+
+<script>
+/* =====================================================================
+   EDIT HERE EVERY WEEK
+   1) Change the week label.
+   2) Change the text between the quotation marks for each sign.
+   Keep the quotation marks and the comma at the end of each line.
+   If a phrase contains a quotation mark ("), write it as \"
+   ===================================================================== */
+const WEEK = "Week of October 12, 2026";
+
+const PHRASES = {
+  Aries:       "You will volunteer to run the experiment nobody wants, then regret it by Wednesday.",
+  Taurus:      "The lab fridge will be rearranged, and you will take it personally.",
+  Gemini:      "You will be in two meetings at once and take notes in neither.",
+  Cancer:      "You will bring snacks to the lab and become the group's favorite person.",
+  Leo:         "Your poster will draw a crowd, and the crowd will mostly want the free pens.",
+  Virgo:       "You will relabel every tube in the freezer and nobody will thank you.",
+  Libra:       "You will mediate a fight over the thermocycler schedule with great diplomacy.",
+  Scorpio:     "You will quietly know who finished the last of the reagent, and say nothing.",
+  Sagittarius: "You will propose an experiment so ambitious that the PI needs to sit down.",
+  Capricorn:   "You will finish your experiments early and start the next ones out of principle.",
+  Aquarius:    "You will suggest a method nobody has heard of, and it will work on the second try.",
+  Pisces:      "You will daydream through a seminar and come up with the best idea of the year."
+};
+/* ===================== END OF THE PART YOU EDIT ===================== */
+
+const SIGNS = [
+  ["Aries","Mar 21 – Apr 19","\u2648","#E4572E"],
+  ["Taurus","Apr 20 – May 20","\u2649","#4FA34A"],
+  ["Gemini","May 21 – Jun 20","\u264A","#D9A21B"],
+  ["Cancer","Jun 21 – Jul 22","\u264B","#2F7DE1"],
+  ["Leo","Jul 23 – Aug 22","\u264C","#E4572E"],
+  ["Virgo","Aug 23 – Sep 22","\u264D","#4FA34A"],
+  ["Libra","Sep 23 – Oct 22","\u264E","#D9A21B"],
+  ["Scorpio","Oct 23 – Nov 21","\u264F","#2F7DE1"],
+  ["Sagittarius","Nov 22 – Dec 21","\u2650","#E4572E"],
+  ["Capricorn","Dec 22 – Jan 19","\u2651","#4FA34A"],
+  ["Aquarius","Jan 20 – Feb 18","\u2652","#D9A21B"],
+  ["Pisces","Feb 19 – Mar 20","\u2653","#2F7DE1"]
+];
+
+document.getElementById("week").textContent = WEEK;
+const grid = document.getElementById("grid");
+SIGNS.forEach(([name, dates, glyph, color]) => {
+  const s = document.createElement("section");
+  s.className = "sign";
+  s.style.setProperty("--c", color);
+  const g = document.createElement("div");
+  g.className = "glyph"; g.setAttribute("aria-hidden", "true"); g.textContent = glyph + "\uFE0E";
+  const b = document.createElement("div");
+  const h = document.createElement("h2");
+  h.textContent = name;
+  const sm = document.createElement("small"); sm.textContent = dates; h.appendChild(sm);
+  const p = document.createElement("p"); p.textContent = PHRASES[name] || "";
+  b.append(h, p); s.append(g, b); grid.appendChild(s);
+});
+</script>
+</body>
+</html>
