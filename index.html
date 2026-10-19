@@ -6,10 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Lab Horoscope</title>
 <meta name="description" content="Tap your sign to reveal what the stars say about your lab group this week.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/bricolage-grotesque-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>
+/* Fonts hosted locally (SIL Open Font License). No requests to Google. */
+@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-weight:500;font-display:swap;src:url("fonts/bricolage-grotesque-latin-500-normal.woff2") format("woff2")}
+@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-weight:800;font-display:swap;src:url("fonts/bricolage-grotesque-latin-800-normal.woff2") format("woff2")}
+@font-face{font-family:"Source Serif 4";font-style:normal;font-weight:400;font-display:swap;src:url("fonts/source-serif-4-latin-400-normal.woff2") format("woff2")}
+@font-face{font-family:"Source Serif 4";font-style:normal;font-weight:600;font-display:swap;src:url("fonts/source-serif-4-latin-600-normal.woff2") format("woff2")}
+
 :root{--bg:#EDF1EF;--ink:#16212B;--muted:#556570;--plate:#FAFCFB;--line:#C4CFCB;
 --display:"Bricolage Grotesque","Trebuchet MS",sans-serif;--serif:"Source Serif 4",Georgia,serif}
 @media (prefers-color-scheme:dark){:root{--bg:#0F1A21;--ink:#E6EEF0;--muted:#93A5AE;--plate:#172630;--line:#2B3E4A}}
@@ -43,6 +47,8 @@ h2.step{font-family:var(--display);font-weight:500;font-size:1.05rem;color:var(-
 .pips i{width:16px;height:16px;border-radius:50%;border:2px solid var(--line)}
 .pips i.on{background:var(--c);border-color:var(--c)}
 .note{margin-top:48px;color:var(--muted);font-size:.9rem}
+.foot{text-align:center;padding:10px;font-size:12px;color:var(--muted)}
+.foot a{color:inherit}
 </style>
 </head>
 <body>
@@ -145,11 +151,10 @@ function reveal(i, btn) {
   reading.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion:reduce)").matches ? "auto" : "smooth", block: "nearest" });
 }
 </script>
-  
-<footer style="text-align: center; padding: 10px; font-size: 10px; color: #888;">
-  © 2026. All rights reserved. Unauthorized reproduction of original content is prohibited.
+
+<footer class="foot">
+  © 2026. All rights reserved. · <a href="privacy.html">Privacy policy / Privacidad</a>
 </footer>
 
 </body>
 </html>
-
